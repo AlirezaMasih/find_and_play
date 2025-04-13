@@ -1,43 +1,50 @@
 #!/bin/bash
 
-#add three parameter variable to get $1(file name) $2(file type [f or d]) $3(wich dir to search in) arguments
+# Get input parameters:
+# $1 is the file name (used as a search keyword for matching files).
+# $2 is the file type (either 'f' for file or 'd' for directory).
+# $3 is the directory where the search will happen.
 file=$1
-stype=$3
-dir=$2
+stype=$2    # Changed $3 to $2 as $stype should be the second argument
+dir=$3      # Changed $2 to $3 as $dir should be the third argument
 
-#an if condition to see if variables got entry or not
-#if variables didnt had value else code will set default values to type and path
+# Check if the 'stype' (file type) variable has been provided:
+# If not, set the default to 'f' (file).
 if [[ -n $stype ]]
 then
-	sleep 1e-06
+    sleep 1e-06  # Tiny sleep, not necessary for function but kept as placeholder.
 else
-	stype='f'
+    stype='f'    # Default to 'f' (file) if 'stype' is not provided.
 fi
 
-
+# Check if the 'dir' (directory) variable has been provided:
+# If not, set the default to the $HOME/Music directory.
 if [[ -n $dir ]]
 then
-	sleep 1e-06
+    sleep 1e-06  # Another unnecessary sleep; can be removed.
 else
-	dir=$HOME/Music
+    dir=$HOME/Music  # Default directory to the user's Music folder if 'dir' is not provided.
 fi
 
+# Now, we begin to search for files or directories using the 'find' command.
+# First, check if the file is a number. If it is, it's assumed to be a number of days for the 'mtime' filter.
 
-#then i wrote find command to search with parameters and execute music files one by on
-#find $dir -type $type -regex '.*'$file'.*mp3' -print0 | xargs -0 -I {} vlc {}
-#yeah i wrote this with xargs -I 
-#but also i can do it with this:
-if [[ $stype = 'f' ]]
+if [[ $file =~ ^-?[0-9]+$ ]]
+then
+    # If the 'file' argument is a number (e.g., '3'), search for files modified within the last $file days.
+    # Search for media files (mp3, mp4, flac, wav, mkv, m4a) within the specified directory.
+    find "$dir" -type "$stype" -regex ".*\.\(mp3\|mp4\|flac\|wav\|mkv\|m4a\)" -mtime -$file -print0 | xargs -0 vlc  # VLC plays the files found.
+
+elif [[ $stype = 'f' ]]
 then 
-	find "$dir" -type $stype -iregex $(echo "$file" | sed 's/\([^ ]\+\)/.*\1.*/g; s/ /\\|/g') -regex ".*mp3\|.*mp4\|.*flac\|.*wav\|.*mkv\|.*m4a" -print0 | xargs -0 vlc
+    # If the 'stype' is 'f' (file), use the 'find' command to search for files matching the $file pattern.
+    # The $file string is processed by sed to handle spaces and ensure correct pattern matching.
+    find "$dir" -type "$stype" -iregex $(echo "$file" | sed 's/\([^ ]\+\)/.*\1.*/g; s/ /\\|/g') -regex ".*\.\(mp3\|mp4\|flac\|wav\|mkv\|m4a\)" -print0 | xargs -0 vlc
 
 elif [[ $stype = 'd' ]]
 then
-
-	find "$dir" -type $stype -iregex ".*$file.*" -print0 | xargs -0 vlc
+    # If the 'stype' is 'd' (directory), search for directories containing the $file pattern in their name.
+    # Only directories matching the $file pattern will be passed to VLC.
+    find "$dir" -type "$stype" -iregex ".*$file.*" -print0 | xargs -0 vlc
 fi
-
-
-
-
 
