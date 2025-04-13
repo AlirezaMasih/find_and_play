@@ -1,8 +1,25 @@
-this script will find and play what argument you enter in vlc
-default search is in only Music dir
+fap - Search and Play Media Files
 
-fap [name] [path] [type]
+Usage:
+  fap [name] [type] [path]
 
+Arguments:
+  name  - File name or number of days for file modification search.
+  type  - 'f' for file search (default), 'd' for directory search.
+  path  - Directory to search in (defaults to $HOME/Music).
 
-type -> f(file) , d(dir)
+How It Works:
+1. If 'name' is a number (e.g., 3), searches for files modified within the last X days.
+2. If 'name' is a string, searches for files or directories containing that name.
+3. Files are played using VLC.
+
+Examples:
+- Search for a file and play:
+  fap "song.mp3" f $HOME/Music
+
+- Search for files modified in the last 3 days:
+  fap 3 f $HOME/Music
+
+- Search for directories with "Music" in the name:
+  fap "Music" d $HOME
 
