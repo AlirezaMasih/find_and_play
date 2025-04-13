@@ -1,0 +1,8 @@
+this script will find and play what argument you enter in vlc
+default search is in only Music dir
+
+fap [name] [path] [type]
+
+
+type -> f(file) , d(dir)
+
