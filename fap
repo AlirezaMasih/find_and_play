@@ -1,0 +1,35 @@
+#!/bin/bash
+
+#add three parameter variable to get $1(file name) $2(file type [f or d]) $3(wich dir to search in) arguments
+file=$1
+stype=$3
+dir=$2
+
+#an if condition to see if variables got entry or not
+#if variables didnt had value else code will set default values to type and path
+if [[ -n $stype ]]
+then
+	sleep 1e-06
+else
+	stype='f'
+fi
+
+
+if [[ -n $dir ]]
+then
+	sleep 1e-06
+else
+	dir=$HOME/Music
+fi
+
+
+#then i wrote find command to search with parameters and execute music files one by on
+#find $dir -type $type -regex '.*'$file'.*mp3' -print0 | xargs -0 -I {} vlc {}
+#yeah i wrote this with xargs -I 
+#but also i can do it with this:
+
+find "$dir" -type $stype -iname "*$file*" -regex ".*mp3\|.*mp4\|.*flac\|.*wav\|.*mkv" -print0 | xargs -0 vlc
+
+
+
+
