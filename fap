@@ -27,8 +27,16 @@ fi
 #find $dir -type $type -regex '.*'$file'.*mp3' -print0 | xargs -0 -I {} vlc {}
 #yeah i wrote this with xargs -I 
 #but also i can do it with this:
+if [[ $stype = 'f' ]]
+then 
+	find "$dir" -type $stype -iregex $(echo "$file" | sed 's/\([^ ]\+\)/.*\1.*/g; s/ /\\|/g') -regex ".*mp3\|.*mp4\|.*flac\|.*wav\|.*mkv\|.*m4a" -print0 | xargs -0 vlc
 
-find "$dir" -type $stype -iname "*$file*" -regex ".*mp3\|.*mp4\|.*flac\|.*wav\|.*mkv" -print0 | xargs -0 vlc
+elif [[ $stype = 'd' ]]
+then
+
+	find "$dir" -type $stype -iregex ".*$file.*" -print0 | xargs -0 vlc
+fi
+
 
 
 
