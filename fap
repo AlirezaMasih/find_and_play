@@ -33,13 +33,13 @@ if [[ $file =~ ^-?[0-9]+$ ]]
 then
     # If the 'file' argument is a number (e.g., '3'), search for files modified within the last $file days.
     # Search for media files (mp3, mp4, flac, wav, mkv, m4a) within the specified directory.
-    find "$dir" -type "$stype" -regex ".*\.\(mp3\|mp4\|flac\|wav\|mkv\|m4a\)" -mtime -$file -print0 | xargs -0 vlc  # VLC plays the files found.
+    find "$dir" -type "$stype" -regex ".*\.\(mp3\|mp4\|flac\|wav\|mkv\|m4a\|webm\)" -mtime -$file -print0 | xargs -0 vlc  # VLC plays the files found.
 
 elif [[ $stype = 'f' ]]
 then 
     # If the 'stype' is 'f' (file), use the 'find' command to search for files matching the $file pattern.
     # The $file string is processed by sed to handle spaces and ensure correct pattern matching.
-    find "$dir" -type "$stype" -iregex $(echo "$file" | sed 's/\([^ ]\+\)/.*\1.*/g; s/ /\\|/g') -regex ".*\.\(mp3\|mp4\|flac\|wav\|mkv\|m4a\)" -print0 | xargs -0 vlc
+    find "$dir" -type "$stype" -iregex $(echo "$file" | sed 's/\([^ ]\+\)/.*\1.*/g; s/ /\\|/g') -regex ".*\.\(mp3\|mp4\|flac\|wav\|mkv\|m4a\|webm\)" -print0 | xargs -0 vlc
 
 elif [[ $stype = 'd' ]]
 then
