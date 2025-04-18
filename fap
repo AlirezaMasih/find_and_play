@@ -5,8 +5,8 @@
 # $2 is the file type (either 'f' for file or 'd' for directory).
 # $3 is the directory where the search will happen.
 file=$1
-stype=$2    # Changed $3 to $2 as $stype should be the second argument
-dir=$3      # Changed $2 to $3 as $dir should be the third argument
+dir=$2    # Changed $3 to $2 as $dir should be the second argument
+stype=$3      # Changed $2 to $3 as $stype should be the third argument
 
 # Check if the 'stype' (file type) variable has been provided:
 # If not, set the default to 'f' (file).
